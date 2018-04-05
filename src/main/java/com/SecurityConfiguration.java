@@ -1,6 +1,10 @@
 package com;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -17,17 +21,42 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    DataSource dataSource;
+
+    @Value("${spring.queries.users-query}")
+    private String usersQuery;
+
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().formLogin().loginPage("/")
+        http.httpBasic()
+                .and().formLogin().loginPage("/").usernameParameter("username").passwordParameter("password")
                 .and().authorizeRequests()
                 .antMatchers("/index.html", "/","/webjars/**","/js").permitAll()
                 .anyRequest().authenticated().and().logout().logoutSuccessUrl("/").and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().addFilterAfter(csrfHeaderFilter(), SessionManagementFilter.class);
     }
 
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery(
+                        "select USER_LOGIN, USER_PASSWORD, enabled\n" +
+                                "from tbl_user\n" +
+                                "where USER_LOGIN = ?;")
+        .authoritiesByUsernameQuery("select USER_LOGIN, ur.ROLE\n" +
+                "from tbl_user u\n" +
+                "JOIN tbl_user_roles ur ON u.USER_ID = ur.USER_ID_FK\n" +
+                "where USER_LOGIN = ?;");
+
+    }
     private Filter csrfHeaderFilter() {
         return new OncePerRequestFilter() {
 

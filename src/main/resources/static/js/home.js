@@ -2,7 +2,6 @@ angular.module("app",[]).config(function($httpProvider) {
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 }).controller("home",function ($http) {
     var self = this;
-    self.hide = false;
     self.credentials = {};
     self.refresh = function(){
         $http.get("/greeting").then(function(response){

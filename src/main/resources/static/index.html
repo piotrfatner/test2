@@ -17,7 +17,7 @@
     <li><a href="">Login</a></li>
     <li><a href="" ng-click="home.logout()">Logout</a></li>
 </ul>
-<form ng-submit="home.login()" class="ng-cloak">
+<form ng-submit="home.login()" ng-hide="home.hide" class="ng-cloak">
     <div class="form-group">
         <label for="username">Username:</label>
         <input text="text" class="form-control" id="content" name="content"
