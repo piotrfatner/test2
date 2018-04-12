@@ -39,6 +39,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/").usernameParameter("username").passwordParameter("password")
                 .and().authorizeRequests()
                 .antMatchers("/index.html", "/","/webjars/**","/js").permitAll()
+                .antMatchers("/view/home.html").hasRole("USER")
+                .antMatchers("/view/employee.html").hasRole("ADMIN")
                 .anyRequest().authenticated().and().logout().logoutSuccessUrl("/").and().csrf().csrfTokenRepository(csrfTokenRepository())
                 .and().addFilterAfter(csrfHeaderFilter(), SessionManagementFilter.class);
     }

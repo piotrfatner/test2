@@ -4,20 +4,31 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Startup</title>
+    <script src="https://cdn.alloyui.com/3.0.1/aui/aui-min.js"></script>
+    <link href="https://cdn.alloyui.com/3.0.1/aui-css/css/bootstrap.min.css" rel="stylesheet"></link>
     <script type="text/javascript" src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/angularjs/1.6.2/angular.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <script type="text/javascript" src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/home.js"></script>
+    <script src="script.js"></script>
 </head>
 <body ng-app="app" ng-controller="home as home">
-<ul class="nav nav-pills" role="tablist">
-    <li class="active" ng-click="home.refresh()"><a href="">Home</a></li>
-    <li><a href="">Login</a></li>
-    <li><a href="" ng-click="home.logout()">Logout</a></li>
-</ul>
-<form ng-submit="home.login()" ng-hide="home.hide" class="ng-cloak">
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" style="align-content: left" href="">Home</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="" ng-click="home.logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<div>
+
+</div>
+<form  authentication-success-handler-ref="authSuccessHandler" ng-submit="home.login()" ng-hide="home.hide" class="ng-cloak">
     <div class="form-group">
         <label for="username">Username:</label>
         <input text="text" class="form-control" id="content" name="content"
@@ -28,10 +39,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-<div class="container ng-cloak" ng-show="home.hide">
-    <p>ID: {{home.greeting.id}}</p>
-    <p>Message: {{home.greeting.msg}}</p>
-</div>
 
 </body>
 </html>
